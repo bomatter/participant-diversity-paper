@@ -1,0 +1,19 @@
+# Configuration of dataset paths.
+# The bids_root paths should point to where the raw data is stored in BIDS format.
+# The deriv_root paths will be created if they do not exist, and will be used to
+# store epoched and processed data in a more efficient format for faster loading
+# during training.
+data:
+  TUAB:
+    bids_root: /path/to/bids_root
+    deriv_root: /path/to/deriv_root
+  PhysioNet:
+    bids_root: /path/to/bids_root
+    deriv_root: /path/to/deriv_root
+  CAUEEG:
+    bids_root: /path/to/bids_root
+    deriv_root: /path/to/deriv_root
+
+# Directory where outpus will be saved (by default).
+# Trial results will be saved in subdirectories.
+output_root: /path/to/output_root

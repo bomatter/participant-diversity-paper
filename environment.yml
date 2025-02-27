@@ -1,0 +1,27 @@
+name: participant-diversity-paper
+channels:
+  - tczhangzhi
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - ipython
+  - jupyter
+  - numpy
+  - pandas
+  - numexpr>=2.8.4
+  - scikit-learn
+  - mne~=1.8.0
+  - mne-bids
+  - torcheeg
+  - scipy<1.13.0  # for compatibility with torcheeg v1.1.2 (https://github.com/torcheeg/torcheeg/pull/124)
+  - matplotlib
+  - seaborn
+  - wandb
+  - tqdm
+  - dirsync
+  - timm
+  - pip
+  - pip:
+    - torch
+    - braindecode>=0.8.1
