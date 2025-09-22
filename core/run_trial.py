@@ -27,7 +27,8 @@ def run_trial(config, output_root=None, use_wandb=False):
         dataset=dataset_train,
         n_participants=config["n_participants"],
         n_segments=config["n_segments"],
-        seed=config["seed"]
+        seed=config["seed"],
+        contiguous=config.get("contiguous", False),
     )
 
     dataloader_train = DataLoader(dataset_train, shuffle=True, batch_size=config["batch_size"], num_workers=2, pin_memory=True)
@@ -147,6 +148,7 @@ def run_trial(config, output_root=None, use_wandb=False):
         "model": config["model"],
         "n_participants": config["n_participants"],
         "n_segments": config["n_segments"],
+        "contiguous": config.get("contiguous", False),
         "seed": config["seed"],
         "n_batches_trained": global_batch - (early_stopping_triggered * config["evaluation_interval"] * config["early_stopping_patience"]),
         "augmentation": config["augmentation"],
@@ -184,6 +186,7 @@ if __name__ == "__main__":
     parser.add_argument("--learning_rate", type=float, default=1e-3, help="Learning rate for the optimizer.")
     parser.add_argument("--n_participants", type=int, required=True, help="Number of participants.")
     parser.add_argument("--n_segments", type=int, required=True, help="Number of segments.")
+    parser.add_argument("--contiguous", action="store_true", help="Sample contiguous segments.")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for data subsampling.")
     parser.add_argument("--experiment_name", type=str, default="baseline", help="Name of the experiment.")
     parser.add_argument("--output_root", type=str, default=user_config["output_root"], help="Output directory. The configuration in user_config.yml will be used by default.")

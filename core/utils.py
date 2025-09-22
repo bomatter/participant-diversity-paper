@@ -37,6 +37,7 @@ def create_trial_configs(
     learning_rate=None,  # If None, the model-specific default learning rate is used
     n_participants=[25, 50, 100, 200, 400, 800, 1600],
     n_segments=[5, 10, 20, 40, 80, 160, 320],
+    contiguous=False,
     seed=[42, 43, 44, 45, 46],
     experiment_name="baseline",
 ):
@@ -88,6 +89,7 @@ def create_trial_configs(
                             learning_rate=learning_rate,
                             n_participants=np,
                             n_segments=ns,
+                            contiguous=contiguous,
                             seed=s,
                             experiment_name=experiment_name,
                         )

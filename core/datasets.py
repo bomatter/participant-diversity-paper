@@ -787,8 +787,11 @@ def build_dataset(
     return dataset
 
 
-def sample_subset(dataset, n_participants, n_segments, seed):
-    """Sample a subset of the dataset with a fixed number of participants and segments."""
+def sample_subset(dataset, n_participants, n_segments, seed, contiguous=False):
+    """
+    Sample a subset of the dataset with a fixed number of participants and segments.
+    If contiguous is True, the segments are sampled such that they are contiguous in time.
+    """
 
     dataset = deepcopy(dataset)
 
@@ -798,9 +801,34 @@ def sample_subset(dataset, n_participants, n_segments, seed):
     dataset.info = dataset.info[dataset.info['subject'].isin(sampled_subjects)]
 
     # Sample segments
-    sampled_segments = dataset.info.groupby('subject')["clip_id"].apply(
-        lambda x: x.sample(n=n_segments, replace=False, random_state=seed)
-    )
+    if contiguous:
+        sampled_segments = []
+        for sub in dataset.info.subject.unique():
+            subject_info = dataset.info[dataset.info['subject'] == sub].copy()
+
+            # Split clip_id into file and index
+            subject_info[["clip_id_file", "clip_id_idx"]] = subject_info["clip_id"].str.rsplit('_', n=1, expand=True)
+            
+            # Sample a random session
+            ses = rng.choice(subject_info["clip_id_file"].unique(), replace=False)
+            session_info = subject_info[subject_info["clip_id_file"] == ses].copy().reset_index(drop=True)
+                
+            # Check that clip_id_idx is sorted and contiguous
+            idx = session_info["clip_id_idx"].astype(int).reset_index(drop=True)
+            assert (idx == range(idx.iloc[0], idx.iloc[0] + len(idx))).all()
+            
+            # Sample contiguous n_segments
+            start_idx = rng.integers(0, len(idx) - n_segments + 1)
+            sampled_segments.extend(session_info.loc[start_idx:(start_idx + n_segments - 1), "clip_id"].tolist())
+    else:
+        sampled_segments = dataset.info.groupby('subject')["clip_id"].apply(
+            lambda x: x.sample(n=n_segments, replace=False, random_state=seed)
+        )
+
     dataset.info = dataset.info[dataset.info["clip_id"].isin(sampled_segments)]
+
+    # Double-check if we have the expected number of participants and segments
+    assert len(dataset.info.subject.unique()) == n_participants
+    assert len(dataset.info) == n_participants * n_segments
 
     return dataset
