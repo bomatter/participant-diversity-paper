@@ -1,6 +1,6 @@
-# Is Limited Participant Diversity Impeding EEG-based Machine Learning?
+# Is Limited Participant Diversity Impeding EEG-based Machine Learning? (NeurIPS 2025)
 
-This repository contains the research code for the experiments in our paper *"Is Limited Participant Diversity Impeding EEG-based Machine Learning?"*
+This repository contains the research code for the experiments in our paper *"Is Limited Participant Diversity Impeding EEG-based Machine Learning?"*, accepted at NeurIPS 2025.
 
 
 
@@ -46,3 +46,17 @@ python core/run_trial.py \
 ```
 
 Alternatively, use the `run_experiments.ipynb` notebook to generate configurations (and submit slurm jobs) for all experiments to reproduce the paper results.
+
+
+
+
+## Citation
+
+```
+@article{bomatter2025limited,
+  title={Is Limited Participant Diversity Impeding EEG-based Machine Learning?},
+  author={Bomatter, Philipp and Gouk, Henry},
+  journal={arXiv preprint arXiv:2503.13497},
+  year={2025}
+}
+```
